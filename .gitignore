@@ -1,5 +1,7 @@
 # Cache objects
 packer_cache/
 
+config/database.php
+
 # For built boxes
 *.box
