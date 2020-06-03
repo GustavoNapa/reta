@@ -12,38 +12,37 @@ $contar = $resultado->rowCount();
 
 <button id="btn_showNovoCarro" class="btn btn-success btn-block mb-4">Novo</button>
     <hr>
-    <div id="form_cadCarro">
-        <form class="p-4">
+    <div>
+        <form id="form_cadCarro" class="p-4">
             <div class="form-group">
-                <label for="exampleInputEmail1">Nome</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nome do cliente">
+                <label for="nome">Nome</label>
+                <input type="text" class="form-control" name="nome" id="nome" aria-describedby="emailHelp" placeholder="Nome do cliente">
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail1">Interesse</label>
-                
+                <label>Interesse</label>
                 
                 <div class="form-check">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-                <label class="form-check-label" for="exampleRadios1">
+                <input class="form-check-input" type="radio" name="interesse" id="interesse1" value="Comprar" checked>
+                <label class="form-check-label" for="interesse1">
                     Comprar
                 </label>
                 </div>
                 <div class="form-check">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                <label class="form-check-label" for="exampleRadios2">
+                <input class="form-check-input" type="radio" name="interesse" id="interesse2" value="Vender">
+                <label class="form-check-label" for="interesse2">
                     Vender
                 </label>
                 </div>
                 <div class="form-check">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
+                <input class="form-check-input" type="radio" name="interesse" id="exampleRadios3" value="Comprar e vender">
                 <label class="form-check-label" for="exampleRadios3">
                     Comprar e vender
                 </label>
                 </div>
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail1">Celular</label>
-                <input type="tel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Celular do cliente">
+                <label for="celular">Celular</label>
+                <input type="tel" class="form-control" name="celular" id="celular" aria-describedby="emailHelp" placeholder="Celular do cliente">
             </div>
             <button type="submit" class="btn btn-primary btn-block">Salvar</button>
             <button id="btn_hideNovoCarro" type="button" class="btn btn-warning btn-block">Voltar</button>
@@ -72,14 +71,115 @@ $contar = $resultado->rowCount();
     
 <script>
     $('#form_cadCarro').hide();
+    $('#celular').mask('(##) #####-####')
+
     $(document).ready(function(err) {
         $('#btn_showNovoCarro').click(function() {
             openFormClient();
+            toastr["success"]("Preencha os dados corretamente!");
         });
 
         $('#btn_hideNovoCarro').click(function() {
             hideFormClient();
+            toastr["warning"]("Os dados não foram salvos");
         });
+
+        
+        // Validar e salvar dados
+        $('#form_cadCarro').submit(function(norefresh){
+
+            // evitar refresh de formulario
+            norefresh.preventDefault();  
+
+            // coloque aqui as coisas de validação e ajax...                 
+            var dados = $('#form_cadCarro').serialize();
+
+            console.log('dados: '+dados);
+
+            // dispara o ajax depois de 1segundo
+            setTimeout(function(){
+                // salvar dador pessoais
+                $.ajax({
+                    url:  'pages/home/save.php',
+                    type:   'POST',
+                    data:       'acao=salvar&'+dados,
+                    beforeSend: '',
+                    error:      '',
+                    success: function(retornovalidarendereco){
+
+                        switch(retornovalidarendereco) {
+
+                            case "0":
+                                toastr["success"]("Área de teste");  
+                                console.log(retornovalidarendereco); 
+
+                                return false;                         
+                            break;
+
+                            // TRATAR SUCESSO DE UPDATE
+                            case "INSERTSUCESSO":
+                                toastr["success"]("Salvo com sucesso!");
+                                
+                                setTimeout(function(){
+                                    // reload
+                                    location.reload();                                
+                                }, 500);
+                                return false;                                        
+                            break;
+                            
+                            case "UPDATESUCESSO":
+                                toastr["success"]("Dados atualizados com sucesso!");
+                                console.log('update-endereco - Sucesso ao atualizar enderenço: '+retornovalidarendereco);
+
+                                setTimeout(function(){
+                                    // reload
+                                    location.reload('cliente?acao=cadastrar');                                
+                                }, 500);
+
+                                return false;
+                            break;
+
+                            // TRATAR ERROS DE UPDATE
+                            case "ERRONOUPDATE":
+                                toastr["error"]("Ocorreu um erro grave, você será redirecionado!");
+                                console.log('update-endereco - Erro no PDO Insert: '+retornovalidarendereco);
+                                
+                                setTimeout(function(){
+                                    window.location.replace('cliente?acao=recuperacao');
+                                }, 1000); 
+                                return false;
+                            break;
+
+                            case "DUPLICIDADEENCONTRADA":
+                                toastr["warning"]("Ouve um erro, endereço duplicado, não é permitido este tipo de duplicidade.");
+                                console.log('Erro no Insert: '+retornoinserirdadospessoais);
+                                
+                                setTimeout(function(){
+                                    window.location.replace('cliente');
+                                }, 5000); 
+                                return false;
+                            break;
+
+                            case "CAMPOSOBRIGATORIOSVAZIOS":                            
+                                toastr["warning"]("Existem campos obrigatórios vazios! Verifique e tente novamente...");
+                                console.log('update-endereco - Campos do formulários vazio: '+retornovalidarendereco);
+
+                                return false;
+                            break;
+
+                            default:
+                                console.log(retornovalidarendereco);
+                                toastr["error"]("Algo de errado aconteceu.");
+                                toastr["error"](retornovalidarendereco);
+
+                                return false;
+                            break;
+                        } // Fim do Switch
+                    } // fim da function
+                }); // fim do ajax
+
+            }, 1000); 
+        }); // fim do submit endereços
     });
 
     function openFormClient() {
