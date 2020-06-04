@@ -13,8 +13,16 @@
             $resultado->bindParam(':interesse' , $_POST['interesse']);
 
             if($resultado->execute()){
-                echo "INSERTSUCESSO";
-                exit;
+                $query_telefone = "INSERT INTO TELEFONES (`NUMBER`, `WHATSAPP`) VALUES (:numero, 0)";
+
+                $resultado_telefone = $conexao->prepare($query_telefone);
+
+                $resultado_telefone->bindParam(':numero', $_POST['celular']);
+
+                if($resultado_telefone->execute()){
+                    echo "INSERTSUCESSO";
+                    exit;
+                }
             } 
             
         }catch(PDOException $e){

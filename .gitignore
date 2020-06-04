@@ -5,3 +5,5 @@ config/database.php
 
 # For built boxes
 *.box
+config/database.php
+config/database.php
