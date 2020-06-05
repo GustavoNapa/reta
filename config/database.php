@@ -1,7 +1,7 @@
 <?php
 
 	try {		
-	    $conexao = new PDO('mysql:host=your_hostname;dbname=your_database;','your_user', 'your_password');
+	    $conexao = new PDO('mysql:host=108.179.193.0:3306;dbname=espac083_reta;','espac083_reta', 'valete');
 	    $conexao->exec('set names UTF8');
 	    $conexao ->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	} catch (PDOException $e) {

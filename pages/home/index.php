@@ -10,6 +10,14 @@ $contar = $resultado->rowCount();
 
 ?>
 
+<div id="modal-infocontato" name="modal-infocontato" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+</div>
+
 <button id="btn_showNovoCarro" class="btn btn-success btn-block mb-4">Novo</button>
     <hr>
     <div>
@@ -62,7 +70,7 @@ $contar = $resultado->rowCount();
                 <th scope="row"><?=$cliente->ID ?></th>
                     <td><?=$cliente->NAME ?></td>
                     <td><?=$cliente->INTERESSE ?></td>
-                    <td class="text-center"><button class="badge badge-info p-2"><i class="fas fa-info"></i></button></td>
+                    <td class="text-center"><button idCliente="<?=$cliente->ID ?>" class="btn_infoCliente badge badge-info p-2"><i class="fas fa-info"></i></button></td>
                 </tr>
             <?php } ?>
         </tbody>
@@ -71,7 +79,7 @@ $contar = $resultado->rowCount();
     
 <script>
     $('#form_cadCarro').hide();
-    $('#celular').mask('(##) #####-####')
+    $('#celular').mask('(##) #####-####');
 
     $(document).ready(function(err) {
         $('#btn_showNovoCarro').click(function() {
@@ -84,6 +92,22 @@ $contar = $resultado->rowCount();
             toastr["warning"]("Os dados não foram salvos");
         });
 
+        $('.btn_infoCliente').click(function(){
+            $('#modal-infocontato').modal('show');
+
+            var idClienteDetalhes = $(this).attr('idCliente');
+
+            $.ajax({
+                url:    'pages/home/modalVisualizarCliente.php',
+                type:   'POST',
+                data:       'idcliente='+idClienteDetalhes,
+                beforeSend: '',
+                error:      '',
+                success: function(retornodetalhes){
+                    $('#modal-infocontato').find('.modal-content').html(retornodetalhes);
+                } // fim da function
+            }); // fim do ajax
+        });
         
         // Validar e salvar dados
         $('#form_cadCarro').submit(function(norefresh){
