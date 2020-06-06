@@ -93,8 +93,6 @@ $contar = $resultado->rowCount();
         });
 
         $('.btn_infoCliente').click(function(){
-            $('#modal-infocontato').modal('show');
-
             var idClienteDetalhes = $(this).attr('idCliente');
 
             $.ajax({
@@ -105,6 +103,8 @@ $contar = $resultado->rowCount();
                 error:      '',
                 success: function(retornodetalhes){
                     $('#modal-infocontato').find('.modal-content').html(retornodetalhes);
+
+                    $('#modal-infocontato').modal('show');
                 } // fim da function
             }); // fim do ajax
         });

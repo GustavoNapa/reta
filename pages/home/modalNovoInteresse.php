@@ -3,7 +3,6 @@
 
     $id = $_POST['idcliente'];
 
-    //Seleciona informações do cliente
     $query = "SELECT * FROM CLIENTES WHERE ID = :idCliente";
 
     $resultado = $conexao->prepare($query);
@@ -17,7 +16,6 @@
 
     $listar_cli = $linha[0];
 
-    //Seleciona informações de telefones do cliente
     $query_tel = "SELECT * FROM TELEFONES WHERE `ID_CLIENTE` = :idCliente";
 
     $resultado = $conexao->prepare($query_tel);
@@ -28,18 +26,6 @@
 
     $linha_tel  = $resultado->fetchAll(PDO::FETCH_OBJ);
     $contar_tel = $resultado->rowCount();
-
-    //Seleciona informações de interesse daquele cliente
-    // $query_int = "SELECT * FROM INTERESSES WHERE `ID_CLIENTE` = :idCliente";
-
-    // $resultado = $conexao->prepare($query_int);
-    
-    // $resultado->bindParam(':idCliente', $id);
-
-    // $resultado->execute(); 
-
-    // $linha_int  = $resultado->fetchAll(PDO::FETCH_OBJ);
-    // $contar_int = $resultado->rowCount();
 ?>
 
 <div class="modal-header">
@@ -60,75 +46,6 @@
                 <label><?php echo $listar_cli->INTERESSE; ?></label>
             </div>	
         </div>
-        
-        <div class="row">
-            <div class="col-md-12">
-                <table id="table_clietes" class="table table-dark">
-                    <thead>
-                        <tr>
-                        <th colspan="4" style="text-align: center;">Telefones
-                            <button id="btn_showTelefone" class="badge badge-success p-2 float-right"><i class="fas fa-plus"></i></button>
-                            <button id="btn_hideTelefone" class="badge badge-warning p-2 float-right d-none"><i class="fas fa-minus"></i></button>
-                            <div id="input_tel" class="row col-md-12 d-none">
-                                <input type="tel" class="form-control col-md-10" name="celular" id="celular" placeholder="Celular do cliente">
-                                <button id="save_celphone" class="badge badge-success col-md-2 p-2"><i class="fas fa-plus"></i></button>
-                            </div>
-                        </th>
-                        </tr>
-                        <?php if($contar_tel){ ?>
-                        <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Numero</th>
-                        <th scope="col">É WPP?</th>
-                        </tr>
-                        <?php } ?>
-                    </thead>
-                    <?php if($contar_tel){ ?>
-                    <tbody>
-                        <?php foreach ($linha_tel as $key => $cliente) { ?>
-                            <tr>
-                            <th scope="row"><?=$cliente->ID ?></th>
-                                <td><?=$cliente->NUMBER ?></td>
-                                <td>Não sei</td>
-                                <td class="text-center"><button class="badge badge-info p-2 btn-block"><i class="fas fa-edit"></i></button></td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                    <?php } ?>
-                </table>
-            </div>	
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <table id="table_clietes" class="table table-dark">
-                    <thead>
-                        <tr>
-                        <th colspan="3" style="text-align: center;">Interesses
-                            <button id="btn_novoInteresse" idCliente="<?= $id ?>" class="badge badge-success p-2 float-right"><i class="fas fa-plus"></i></button>
-                        </th>
-                        </tr>
-                        <?php if($contar_tel){ ?>
-                        <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Tipo</th>
-                        <th scope="col">Detalhes</th>
-                        </tr>
-                        <?php } ?>
-                    </thead>
-                    <?php if($contar_tel){ ?>
-                    <tbody>
-                        <?php foreach ($linha_tel as $key => $cliente) { ?>
-                            <tr>
-                            <th scope="row"><?=$cliente->ID ?></th>
-                                <td>Automóvel</td>
-                                <td class="text-center"><button class="badge badge-info p-2 btn-block"><i class="fas fa-info"></i></button></td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                    <?php } ?>
-                </table>
-            </div>	
-        </div>
     </div>
 </div>
 <div class="modal-footer">
@@ -142,21 +59,6 @@
         });
         $('#btn_hideTelefone').click(function() {
             hideFormTelefone();
-        });
-
-        $('#btn_novoInteresse').click(function(){
-            var idClienteDetalhes = $(this).attr('idCliente');
-
-            $.ajax({
-                url:    'pages/home/modalNovoInteresse.php',
-                type:   'POST',
-                data:       'idcliente='+idClienteDetalhes,
-                beforeSend: '',
-                error:      '',
-                success: function(retornodetalhes){
-                    $('#modal-infocontato').find('.modal-content').html(retornodetalhes);
-                } // fim da function
-            }); // fim do ajax
         });
 
         $('#save_celphone').click(function() {
@@ -245,7 +147,6 @@
                         } // Fim do Switch
                     } // fim da function
                 }); // fim do ajax
-
             }, 1000); 
         })
     });
