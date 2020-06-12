@@ -46,70 +46,24 @@
         </div>
         <div class="col-md-12">
             </label><label for="btn_trade" class="control-label"></label>
-            <button id="btn_trade" type="button" class="btn btn-block btn-success">
+            <button id="btn_trade" type="button" class="btn btn-block btn-success btn-sel-page">
                 <span id="span_trade"><b><i class="fas fa-arrow-up"></i> </b>Vender</span>
                 <input id="trade" name="trade" type="checkbox" checked class="invisible">
             </button>
         </div>
         <div class="col-md-12">
             </label><label for="btn_bem_pretendido" class="control-label"></label>
-            <button id="btn_bem_pretendido" type="button" class="btn btn-block btn-info">
+            <button id="btn_bem_pretendido" type="button" class="btn btn-block btn-info btn-sel-page">
                 <span id="span_bem_pretendido"><b><i class="fas fa-car"></i> </b>Carro</span>
                 <input id="bem_pretendido" name="bem_pretendido" type="checkbox" class="invisible">
             </button>
         </div>
         <HR />
         <div id="detalhes" class="col-md-12">
-            <div class="form-group">
-                <label for="nome">Marca</label>
-                <select class="form-control">
-                    <option>Chevrolet</option>
-                    <option>Fiat</option>
-                    <option>Ford</option>
-                    <option>Honda</option>
-                    <option>Hyundai</option>
-                    <option>Jeep</option>
-                    <option>Nissan</option>
-                    <option>Renault</option>
-                    <option>Toyota</option>
-                    <option>Volkswagen</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="nome">Modelo</label>
-                <input type="text" class="form-control" name="modelo" id="modelo" placeholder="Modelo">
-            </div>
-            <div class="form-group">
-                <label for="nome">Ano</label>
-                <input type="number" class="form-control" value="2000" min="1900" max="2021" name="nome" id="nome" aria-describedby="emailHelp" placeholder="Nome do cliente">
-            </div>
-            <div class="form-group">
-                <label for="nome">Preço</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupPrepend">R$</span>
-                    </div>
-                    <input type="text" class="form-control" name="preco" id="preco" placeholder="15.000,00">
-                </div>
-            </div>
-            <div class="form-group">
-                </label><label for="btn_troca" class="control-label"></label>
-                <button id="btn_troca" type="button" class="btn btn-block btn-danger">
-                    <b>Aceita troca? </b><span id="span_troca">NÃO</span>
-                    <input id="troca" name="troca" type="checkbox" class="invisible">
-                </button>
-            </div>
-            <div class="form-group">
-                <label for="nome">Observações extras</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-            </div>            
-            <div class="form-group">
-                <button id="salvar_interesse" class="btn btn-success btn-block p-2"><i class="fas fa-save"></i> Salvar</button>
-            </div>            
-            <div class="form-group">
-                <button idCliente="<?= $id ?>" class="btn_infoCliente btn btn-warning btn-block p-2"><i class="fas fa-arrow-left"></i> Voltar</button>
-            </div>
-            
+            <?php include_once "venderCarro.php"; ?>
+        </div>    
+        <div class="form-group">
+            <button idCliente="<?= $id ?>" class="btn_infoCliente btn btn-warning btn-block p-2"><i class="fas fa-arrow-left"></i> Voltar</button>
         </div>
     </div>
     
@@ -120,12 +74,6 @@
     $('#celular').mask('(##) #####-####');
 
     $(document).ready(function(err) {
-        $('#btn_showTelefone').click(function() {
-            openFormTelefone();
-        });
-        $('#btn_hideTelefone').click(function() {
-            hideFormTelefone();
-        });
 
         $('#btn_bem_pretendido').click(function(){
             if(document.getElementById("bem_pretendido").checked == true){
@@ -160,6 +108,45 @@
                 document.getElementById("troca").checked = true;
                 $('#btn_troca').removeClass('btn-danger').addClass('btn-success');
                 $('#span_troca').html('SIM');              
+            }
+        });
+
+        $('.btn-sel-page').click(function(){
+            trade = document.getElementById("trade").checked;
+            bem_pretendido = document.getElementById("bem_pretendido").checked;
+
+            if(trade){
+                if(bem_pretendido){
+                    $.ajax({
+                        url:    'pages/home/venderImovel.php',
+                        success: function(retornodetalhes){
+                            $("#detalhes").html(retornodetalhes);
+                        } // fim da function
+                    }); // fim do ajax
+                }else{
+                    $.ajax({
+                        url:    'pages/home/venderCarro.php',
+                        success: function(retornodetalhes){
+                            $("#detalhes").html(retornodetalhes);
+                        } // fim da function
+                    }); // fim do ajax
+                }
+            }else{
+                if(bem_pretendido){                    
+                    $.ajax({
+                        url:    'pages/home/comprarImovel.php',
+                        success: function(retornodetalhes){
+                            $("#detalhes").html(retornodetalhes);
+                        } // fim da function
+                    }); // fim do ajax
+                }else{
+                    $.ajax({
+                        url:    'pages/home/comprarCarro.php',
+                        success: function(retornodetalhes){
+                            $("#detalhes").html(retornodetalhes);
+                        } // fim da function
+                    }); // fim do ajax
+                }
             }
         });
 
@@ -273,16 +260,4 @@
             }, 1000); 
         })
     });
-
-    function openFormTelefone() {
-        $('#btn_showTelefone').addClass("d-none");
-        $('#btn_hideTelefone').removeClass("d-none");
-        $('#input_tel').removeClass("d-none");
-    }
-
-    function hideFormTelefone() {
-        $('#btn_showTelefone').removeClass("d-none");
-        $('#btn_hideTelefone').addClass("d-none");
-        $('#input_tel').addClass("d-none");
-    }
 </script>
