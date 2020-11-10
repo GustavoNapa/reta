@@ -1,9 +1,2 @@
-# Cache objects
-packer_cache/
 
-config/database.php
-
-# For built boxes
-*.box
-config/database.php
-config/database.php
+global/controller/conexao/conexao_pdo.php
