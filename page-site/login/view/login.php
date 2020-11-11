@@ -23,12 +23,8 @@
 
 <style type="text/css">
     body {
-        background: 
-            linear-gradient(
-              rgba(0, 0, 0, 0.7), 
-              rgba(0, 0, 0, 0.7)
-            ),
-            url(page-site/inicio/media/loja_acb2.jpg) fixed center center;
+        background:
+            url(global/media/17580.jpg) fixed center center;
         background-size: cover;
         padding: 60px 0;
     }
@@ -47,7 +43,7 @@
                     <div class="card-body">
 
                         <center>
-                            <img class="avatar rounded-circle" src="global/media/logo_acb.png" style="max-height: 100px">
+                            <img class="avatar rounded-circle" src="global/media/logo_fp.png" style="max-height: 100px">
                         </center>
 
                         <div class="clearfix mb-3"></div>

@@ -6,11 +6,11 @@
 
 # Básico - GERAL
   -- -----------------------------------------------------
-  -- Table `acb_categoria`
+  -- Table `rtv_categoria`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_categoria` ;
+    DROP TABLE IF EXISTS `rtv_categoria` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_categoria` (
+    CREATE TABLE IF NOT EXISTS `rtv_categoria` (
       `ctg_id` INT UNIQUE AUTO_INCREMENT,
       `ctg_status` INT NOT NULL,
       `ctg_nome` VARCHAR(50) UNIQUE NOT NULL,
@@ -21,11 +21,11 @@
     ENGINE = InnoDB;
 
   -- -----------------------------------------------------
-  -- Table `acb_sexo`
+  -- Table `rtv_sexo`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_sexo` ;
+    DROP TABLE IF EXISTS `rtv_sexo` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_sexo` (
+    CREATE TABLE IF NOT EXISTS `rtv_sexo` (
       `sex_id` INT UNIQUE AUTO_INCREMENT,
       `sex_status` INT NOT NULL,
       `sex_nome` VARCHAR(50) UNIQUE NOT NULL,
@@ -36,11 +36,11 @@
     ENGINE = InnoDB;
 
   -- -----------------------------------------------------
-  -- Table `acb_estadocivil`
+  -- Table `rtv_estadocivil`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_estadocivil` ;
+    DROP TABLE IF EXISTS `rtv_estadocivil` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_estadocivil` (
+    CREATE TABLE IF NOT EXISTS `rtv_estadocivil` (
       `ecv_id` INT UNIQUE AUTO_INCREMENT,
       `ecv_status` INT NOT NULL,
       `ecv_nome` VARCHAR(50) UNIQUE NOT NULL,
@@ -51,11 +51,11 @@
     ENGINE = InnoDB;
 
   -- -----------------------------------------------------
-  -- Table `acb_setor`
+  -- Table `rtv_setor`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_setor` ;
+    DROP TABLE IF EXISTS `rtv_setor` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_setor` (
+    CREATE TABLE IF NOT EXISTS `rtv_setor` (
       `set_id` INT UNIQUE AUTO_INCREMENT,
       `set_status` INT NOT NULL,
       `set_nome` VARCHAR(50) UNIQUE NOT NULL,
@@ -69,11 +69,11 @@
     ENGINE = InnoDB;
 
   -- -----------------------------------------------------
-  -- Table `acb_estado`
+  -- Table `rtv_estado`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_unidadedemedida` ;
+    DROP TABLE IF EXISTS `rtv_unidadedemedida` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_unidadedemedida` (
+    CREATE TABLE IF NOT EXISTS `rtv_unidadedemedida` (
       `umd_id` INT UNIQUE AUTO_INCREMENT,
       `umd_status` INT NOT NULL,
       `umd_nome` VARCHAR(50) UNIQUE NOT NULL,
@@ -85,11 +85,11 @@
     ENGINE = InnoDB;
 
   -- -----------------------------------------------------
-  -- Table `acb_estado`
+  -- Table `rtv_estado`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_estado` ;
+    DROP TABLE IF EXISTS `rtv_estado` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_estado` (
+    CREATE TABLE IF NOT EXISTS `rtv_estado` (
       `est_id` INT UNIQUE AUTO_INCREMENT,
       `est_status` INT NOT NULL,
       `est_uf` VARCHAR(2) UNIQUE NOT NULL,
@@ -101,11 +101,11 @@
     ENGINE = InnoDB;
 
   -- -----------------------------------------------------
-  -- Table `acb_cidade`
+  -- Table `rtv_cidade`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_cidade` ;
+    DROP TABLE IF EXISTS `rtv_cidade` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_cidade` (
+    CREATE TABLE IF NOT EXISTS `rtv_cidade` (
       `cid_id` INT UNIQUE AUTO_INCREMENT,
       `cid_idestado` INT NOT NULL,
       `cid_status` INT NOT NULL,
@@ -114,19 +114,19 @@
       `cid_dtalter` DATETIME NOT NULL,
       `cid_usualter` INT NOT NULL,
       PRIMARY KEY (`cid_id`),
-      CONSTRAINT `fk_acb_cidade_acb_estado1`
+      CONSTRAINT `fk_rtv_cidade_rtv_estado1`
         FOREIGN KEY (`cid_idestado`)
-        REFERENCES `acb_estado` (`est_id`)
+        REFERENCES `rtv_estado` (`est_id`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
   -- -----------------------------------------------------
-  -- Table `acb_bairro`
+  -- Table `rtv_bairro`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_bairro` ;
+    DROP TABLE IF EXISTS `rtv_bairro` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_bairro` (
+    CREATE TABLE IF NOT EXISTS `rtv_bairro` (
       `bai_id` INT UNIQUE AUTO_INCREMENT,
       `bai_idcidade` INT NOT NULL,
       `bai_status` INT NOT NULL,
@@ -135,9 +135,9 @@
       `bai_dtalter` DATETIME NOT NULL,
       `bai_usualter` INT NOT NULL,
       PRIMARY KEY (`bai_id`),
-      CONSTRAINT `fk_acb_bairro_acb_cidade1`
+      CONSTRAINT `fk_rtv_bairro_rtv_cidade1`
         FOREIGN KEY (`bai_idcidade`)
-        REFERENCES `acb_cidade` (`cid_id`)
+        REFERENCES `rtv_cidade` (`cid_id`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
     ENGINE = InnoDB;
@@ -146,9 +146,9 @@
   -- -----------------------------------------------------
   -- Table `fd_pwainfo`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_pwainfo` ;
+    DROP TABLE IF EXISTS `rtv_pwainfo` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_pwainfo` (
+    CREATE TABLE IF NOT EXISTS `rtv_pwainfo` (
       `pwa_id` INT UNIQUE AUTO_INCREMENT,
       `pwa_status` INT NOT NULL,
       `pwa_background_color` VARCHAR(50) NOT NULL,
@@ -182,11 +182,11 @@
     ENGINE = InnoDB;
 
   -- -----------------------------------------------------
-  -- Table `acb_page`
+  -- Table `rtv_page`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_page` ;
+    DROP TABLE IF EXISTS `rtv_page` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_page` (
+    CREATE TABLE IF NOT EXISTS `rtv_page` (
       `pge_id` INT UNIQUE AUTO_INCREMENT,
       `pge_status` INT NOT NULL,
       `pge_urlnome` VARCHAR(20) NOT NULL,
@@ -205,20 +205,20 @@
       `pge_dtalter` DATETIME NOT NULL,
       `pge_usualter` INT NULL,
       PRIMARY KEY (`pge_id`),
-      CONSTRAINT `fk_acb_page_acb_pwainfo`
+      CONSTRAINT `fk_rtv_page_rtv_pwainfo`
         FOREIGN KEY (`pge_idpwa`)
-        REFERENCES `acb_pwainfo` (`pwa_id`)
+        REFERENCES `rtv_pwainfo` (`pwa_id`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
 # Sistema
   -- -----------------------------------------------------
-  -- Table `acb_nivelacesso`
+  -- Table `rtv_nivelacesso`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_nivelacesso` ;
+    DROP TABLE IF EXISTS `rtv_nivelacesso` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_nivelacesso` (
+    CREATE TABLE IF NOT EXISTS `rtv_nivelacesso` (
       `nva_id` INT UNIQUE AUTO_INCREMENT,
       `nva_status` INT NOT NULL,
       `nva_nome` VARCHAR(50) UNIQUE NOT NULL,
@@ -235,11 +235,11 @@
     ENGINE = InnoDB;
 
   -- -----------------------------------------------------
-  -- Table `acb_endereco`
+  -- Table `rtv_endereco`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_endereco` ;
+    DROP TABLE IF EXISTS `rtv_endereco` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_endereco` (
+    CREATE TABLE IF NOT EXISTS `rtv_endereco` (
       `end_id` INT UNIQUE AUTO_INCREMENT,
       `end_cep` VARCHAR(10) NOT NULL,
       `end_logradouro` VARCHAR(100) NULL,
@@ -258,11 +258,11 @@
     ENGINE = InnoDB;
 
   -- -----------------------------------------------------
-  -- Table `acb_usuario`
+  -- Table `rtv_usuario`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_usuario` ;
+    DROP TABLE IF EXISTS `rtv_usuario` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_usuario` (
+    CREATE TABLE IF NOT EXISTS `rtv_usuario` (
       `usu_id` INT UNIQUE AUTO_INCREMENT,
       `usu_status` INT NOT NULL,
       `usu_idnivelacesso` INT NOT NULL,
@@ -292,37 +292,37 @@
       PRIMARY KEY (`usu_id`),
       CONSTRAINT `fk_hsa_usuario_hsa_nivelacesso1`
         FOREIGN KEY (`usu_idnivelacesso`)
-        REFERENCES `acb_nivelacesso` (`nva_id`)
+        REFERENCES `rtv_nivelacesso` (`nva_id`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-      CONSTRAINT `fk_acb_usuario_acb_sexo1`
+      CONSTRAINT `fk_rtv_usuario_rtv_sexo1`
         FOREIGN KEY (`usu_idsexo`)
-        REFERENCES `acb_sexo` (`sex_id`)
+        REFERENCES `rtv_sexo` (`sex_id`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-      CONSTRAINT `fk_acb_usuario_acb_estadocivil1`
+      CONSTRAINT `fk_rtv_usuario_rtv_estadocivil1`
         FOREIGN KEY (`usu_idestadocivil`)
-        REFERENCES `acb_estadocivil` (`ecv_id`)
+        REFERENCES `rtv_estadocivil` (`ecv_id`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-      CONSTRAINT `fk_acb_usuario_acb_setor1`
+      CONSTRAINT `fk_rtv_usuario_rtv_setor1`
         FOREIGN KEY (`usu_idsetor`)
-        REFERENCES `acb_setor` (`set_id`)
+        REFERENCES `rtv_setor` (`set_id`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-      CONSTRAINT `fk_acb_usuario_fd_endereco1`
+      CONSTRAINT `fk_rtv_usuario_fd_endereco1`
         FOREIGN KEY (`usu_idendereco`)
-        REFERENCES `acb_endereco` (`end_id`)
+        REFERENCES `rtv_endereco` (`end_id`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
   -- -----------------------------------------------------
-  -- Table `acb_loja`
+  -- Table `rtv_loja`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_loja` ;
+    DROP TABLE IF EXISTS `rtv_loja` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_loja` (
+    CREATE TABLE IF NOT EXISTS `rtv_loja` (
       `loj_id` INT UNIQUE AUTO_INCREMENT,
       `loj_status` INT NOT NULL,
       `loj_disponibilidade` INT NULL,
@@ -345,19 +345,19 @@
       `loj_dtalter` DATETIME NOT NULL,
       `loj_usualter` INT NOT NULL,
       PRIMARY KEY (`loj_id`),
-      CONSTRAINT `fk_acb_loja_acb_endereco1`
+      CONSTRAINT `fk_rtv_loja_rtv_endereco1`
         FOREIGN KEY (`loj_idendereco`)
-        REFERENCES `acb_endereco` (`end_id`)
+        REFERENCES `rtv_endereco` (`end_id`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
   -- -----------------------------------------------------
-  -- Table `acb_regiao`
+  -- Table `rtv_regiao`
   -- -----------------------------------------------------
-    DROP TABLE IF EXISTS `acb_regiao` ;
+    DROP TABLE IF EXISTS `rtv_regiao` ;
 
-    CREATE TABLE IF NOT EXISTS `acb_regiao` (
+    CREATE TABLE IF NOT EXISTS `rtv_regiao` (
       `reg_id` INT UNIQUE AUTO_INCREMENT,
       `reg_idloja` INT NOT NULL,
       `reg_idbairro` INT NOT NULL,
@@ -367,14 +367,14 @@
       `reg_dtalter` DATETIME NOT NULL,
       `reg_usualter` INT NOT NULL,
       PRIMARY KEY (`reg_id`),
-      CONSTRAINT `fk_acb_regiao_acb_bairro1`
+      CONSTRAINT `fk_rtv_regiao_rtv_bairro1`
         FOREIGN KEY (`reg_idbairro`)
-        REFERENCES `acb_bairro` (`bai_id`)
+        REFERENCES `rtv_bairro` (`bai_id`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-      CONSTRAINT `fk_acb_regiao_acb_loja1`
+      CONSTRAINT `fk_rtv_regiao_rtv_loja1`
         FOREIGN KEY (`reg_idloja`)
-        REFERENCES `acb_loja` (`loj_id`)
+        REFERENCES `rtv_loja` (`loj_id`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
     ENGINE = InnoDB;

@@ -11,15 +11,15 @@
     cursor: pointer!important;
   }
   .btn-acb{
-    background: rgba(91, 46, 129, 0.97);
+    background: #666;
     color: #fff;
     transition: all 0.7s;
   }
 
   .btn-acb:hover{
-    transition: all 0.7s;
-    background: rgba(255, 255, 255, 0.7);
-    color: rgba(91, 46, 129, 1);
+    transition: all 0.3s;
+    background: #333;
+    color: #fff;
   }
 
   .card_nossaslojas{
@@ -69,7 +69,7 @@
       bottom: 0;
       z-index: 9999;
       overflow: hidden;
-      background: rgba(91, 46, 129, 0.9);
+      background: #666;
     }
 
   /* ----------------------------------------------------------------

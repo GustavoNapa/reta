@@ -1,8 +1,8 @@
 <?php
 	
 	// Váriaveis GLOBAIS #690091
-	define('DB_PREFIX', 'acb');
-	define('SS_PREFIX', 'ACB');
+	define('DB_PREFIX', 'rtv');
+	define('SS_PREFIX', 'RTV');
 
 	// // HTTP
 	// define('HTTP_SERVER', 'http://localhost/s4bit/lavor/public/');

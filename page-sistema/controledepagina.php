@@ -25,7 +25,7 @@
         $_favicon = 'page-'.$_paginaatual->pge_diretorio.'/'.$_paginaatual->pge_urlnome.'/media/'.$_paginaatual->pge_favicon;
 
         if (!file_exists($_favicon)) {
-          $_favicon = 'global/media/favicon.ico';
+          $_favicon = 'global/media/logo_fp.png';
         }
       ?>
       <link rel="shortcut icon" type="image/x-icon" href="<?=$_favicon?>" />
@@ -101,13 +101,14 @@
         body{
             min-height:100vh;
             background-repeat: repeat;
-            background: url(global/media/backgroundbody.jpg); 
+            background: url(global/media/17580.jpg) fixed center center;
+        background-size: cover;
         }
     </style>
 
     <!-- Template -->
     <section style="min-height: 100vh;">
-      <div id="wrapper" class="d-flex <?=$_SESSION[SS_PREFIX.'_MENU']==1?"toggled":""; ?>" >
+      <div id="wrapper" class="d-flex" >
         
         <!-- INCLUDE MENU SIDEBAR -->
         <?php 
@@ -119,12 +120,12 @@
         <div id="page-content-wrapper">
 
             <!-- INCLUDE MENU -->
-            <nav id="menufix" class="navbar navbar-expand-lg navbar-light bg_tema fixed-top wow slideInDown" data-wow-delay="0.5s" style="border-bottom: solid 1px rgba(105, 0, 145, 0.5)!important;">
+            <nav id="menufix" class="navbar navbar-expand-lg navbar-light bg_tema fixed-top wow slideInDown" data-wow-delay="0.5s">
                 <button class="btn btn-primary" style="display: none;">Toggle Menu</button>
 
                 <!-- MENU FIXO -->
                 <div class="menu_toggle" align="left">
-                    <img src="global/media/logo_acb.png" height="50" align="center">
+                    <img src="global/media/logo_fp.png" height="50" align="center">
                 </div>
                 <div class="menu_toggle col justify-content-start text-left">
                     <small class="float-left" >

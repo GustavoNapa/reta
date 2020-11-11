@@ -119,7 +119,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <div id="preloader" class="text-center justify-content-center" align="center">
-      <img class="p-3" src="global/media/logo_acb.gif" style="max-width: 300px;">
+      <img class="p-3" src="global/media/logo_fp.png" style="max-width: 300px;">
     </div>
 
   </body>

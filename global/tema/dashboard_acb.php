@@ -44,8 +44,8 @@
     }
     .bg_tema{
       /*background: rgba(105, 0, 145, 0.7)!important;*/
-      background: #f9fbfd!important;
-      /*color: rgba(255, 255, 255, 1)!important;*/
+      background: #333!important;
+      color: rgba(255, 255, 255, 1)!important;
     }
 
     .bg_tema_hover:hover{
@@ -157,16 +157,19 @@
     .accordion .list-group-item, .text_menu, .nav-admin{
       font-size: 13px;
     }
-    .nav-admin{
-      padding-top: 10px!important;
+    .nav-admin      padding-top: 10px!important;
     }
     .accordion .list-group-item:hover, .text_menu:hover, .nav-admin:hover{
       background: rgba(105, 0, 145, 0.7)!important;
       color: #fff!important;
     }
 
-    .navbar-text:hover{
+    .navbar-text{
       color: #fff!important;
+    }
+
+    .navbar-text:hover{
+      color: #aaa!important;
     }
 
     #sidebar-wrapper {

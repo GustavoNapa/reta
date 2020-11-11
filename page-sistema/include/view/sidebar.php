@@ -1,16 +1,15 @@
 <!-- Documento HTML Desenvolvido por: Pedro HSA -->
 
 <!-- Sidebar -->
-<div id="sidebar-wrapper" class="bg_tema wow slideInLeft" data-wow-delay="0.5s" style="border-right: solid 1px rgba(105, 0, 145, 0.5)!important;">
+<div id="sidebar-wrapper" class="bg_tema wow slideInLeft" data-wow-delay="0.5s">
 
    <!-- Saudacao no menu -->
    <div class="list-group list-group-flush text-dark mb-5" align="left">
       <!-- NAO APAGUE ISSO -->
    </div>
-   <div class="clearfix"></div>      
 
     <!-- BLOCO ACORCION -->
-    <div id="menuprincipal" class="accordion list-group list-group-flush text-left upper mt-4" style="position: fixed;">
+    <div id="menuprincipal" class="accordion list-group list-group-flush text-left upper mt-3" style="position: fixed;">
 
       <!-- IMG-PERFIL -->
       <a href="#" hidden class="list-group-item list-group-item-action text-dark border-0 pt-5 mt-5 nolink_perfil">
@@ -35,8 +34,8 @@
          <?php endif ?>
 
          <?php if ( $_SESSION[SS_PREFIX.'_USUARIO']->nva_gerenciarloja==1 ): ?>
-            <a data-target="#loja" href="#" class="list-group-item list-group-item-action bg-light text-dark upper text_menu" data-toggle="collapse" aria-expanded="false">
-               <i class="fas fa-store"></i>&nbsp;&nbsp;LOJAS ACB
+            <!-- <a data-target="#loja" href="#" class="list-group-item list-group-item-action bg-light text-dark upper text_menu" data-toggle="collapse" aria-expanded="false">
+               <i class="fas fa-store"></i>&nbsp;&nbsp;LOJAS RTV
                <span class="float-right"><i class="fa fa-angle-down"></i></span>
             </a>
                <div id="loja" data-parent="#menuprincipal" class="list-group list-group-flush text-left collapse" style="">
@@ -55,7 +54,7 @@
                      <i class="icofont-google-map"></i>
                      &nbsp;Cadastro de regiões
                   </a>
-               </div>
+               </div> -->
          <?php endif ?>
 
          <?php if ( $_SESSION[SS_PREFIX.'_USUARIO']->nva_gerenciarproduto==1 ): ?>
