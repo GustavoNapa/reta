@@ -36,6 +36,128 @@
         exit;
     }
 
+    // Função para executar query diretamente
+    function fgb_executemyquery($arr_query='', $tabela='', $complemento=''){
+        
+        // Conectar o banco
+        include '../../../global/controller/conexao/conexao_pdo.php';
+        include 'global/controller/conexao/conexao_pdo.php';
+
+        $resultado = array(
+            'status'        => false, 
+            'total'         => 0, 
+            'objeto'        => null, 
+            'lastInsertId'  => null, 
+            'erro'          => null, 
+            'log'           => null, 
+            'arr_query'     => $arr_query, 
+            'tabela'        => $tabela, 
+            'complemento'   => $complemento, 
+        );
+
+        // não pode receber tres parametros vazios
+        if ( $arr_query=='' && $tabela=='' && $complemento=='' ) {
+            $resultado['erro']  = 'Nenhum parametro informado!';
+            $resultado['log']   = 'Nenhum parametro informado!';
+            return json_decode(json_encode($resultado));
+            exit;
+        }
+
+        // se receber array no 1º parametro
+        if ( is_array($arr_query) ) {
+            // é obrigatorio informar a tabela
+            if ( $tabela=='' ) {
+                $resultado['erro']  = 'Tabela não informada!';
+                $resultado['log']   = 'É necessário informar a tabela!';
+                return json_decode(json_encode($resultado));
+                exit;
+            }
+
+            // montando where (só busca por operador lógico = )
+            if ($arr_query!="") {
+                foreach ($arr_query as $campo => $valor) {
+                    if ($_where=="") {
+                        $_where = " WHERE ".$campo."=:".$campo;
+                    } else {
+                        $_where .= " AND ".$campo."=:".$campo;
+                    }
+
+                }
+            }
+
+            $query = ' SELECT * FROM '.$tabela.' '.$_where.' '.$complemento;
+        }else{
+
+            if ( $arr_query=="S" || $arr_query=="SELECT" ) {
+                # S ou SELECT
+                $query          = 'SELECT * FROM '.$tabela." ".$complemento;
+                $mensagemFinal  = 'Tudo certo!';
+            }elseif ( $arr_query=="SP" || $arr_query=="SELECTPERSONALIZADO" ) {
+                # SP ou SELECTPERSONALIZADO
+                $query          = $tabela." ".$complemento;
+                $mensagemFinal  = 'Tudo certo!';
+            }elseif ( $arr_query=="I" || $arr_query=="INSERT" ) {
+                # U ou UPDATE
+                $query = 'INSERT INTO `'.$tabela.'` ( '.$complemento.' )';
+                $mensagemFinal  = 'Novo registro cadastrado!';
+            }elseif ( $arr_query=="U" || $arr_query=="UPDATE" ) {
+                # U ou UPDATE
+                $query = 'UPDATE `'.$tabela.'` SET '.$complemento['complemento'].' WHERE '.$complemento['where'];
+                $mensagemFinal  = 'Registro atualizado!';
+            }
+            elseif ( $arr_query=="D" || $arr_query=="DELETE" ) {
+                # D ou DELETE
+                $query = 'DELETE FROM `'.$tabela.'` WHERE '.$complemento;
+                $mensagemFinal  = 'Registro Excluido!';
+            }
+        }
+
+        $resultado['query'] = $query;
+
+        try{ 
+            $conexao->beginTransaction();
+
+            $r_query    = $conexao->prepare($query);
+
+            if ( is_array($arr_query) ) {
+                foreach ( $arr_query as $campo => $valor ) {
+                    $r_query->bindValue(":".$campo, $valor);
+
+                    $resultado['_where'] .= " : $campo = $valor \n ";
+                }
+            }
+
+            if ( $r_query->execute()) {
+
+                if ( is_array($arr_query) || $arr_query=="S" || $arr_query=="SELECT" || $arr_query=="SP" || $arr_query=="SELECTPERSONALIZADO" ) {
+                    $resultado['total']     = $r_query->rowCount();
+                    $resultado['objeto']    = $r_query->fetchAll(PDO::FETCH_OBJ);
+                }
+
+                if ( $arr_query=="I" || $arr_query=="INSERT" ) {
+                    $resultado['lastInsertId']     = $conexao->lastInsertId();
+                }                    
+
+                $resultado['status']    = true;
+
+                $resultado['info']      = $mensagemFinal;
+
+                $conexao->commit();
+
+                return json_decode(json_encode($resultado));
+                exit;
+            }
+        }catch(PDOException $e){
+            $conexao->rollBack();
+            $resultado['erro']  = $e;
+            $resultado['log']   = 'Erro grave ao executar o comando!'; 
+            return json_decode(json_encode($resultado));
+            exit;
+        } // se nao der certo faça isso
+
+        return json_decode(json_encode($resultado));
+    }
+
     // Atualiza dados do usuário logado
     function fgb_atualizarusuariologado(){
         // Criar função que atualiza sessão de usuário logado

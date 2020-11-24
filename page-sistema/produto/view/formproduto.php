@@ -4,18 +4,15 @@ session_start();//iniciar sessao
 error_reporting(0); //não exibir erros!*
 	
 	// Carregar produto
-	// if ( isset($_GET['pro_id']) && $_GET['pro_id']!="" ) {
-	// 	$getProduto = sc_getProduto( array('pro_id' => $_GET['pro_id'] ) );
-		
+	if ( isset($_GET['pro_id']) && $_GET['pro_id']!="" ) {
+		$retorno = fgb_executemyquery('SP', 'SELECT * FROM  rtv_produto p
+												 	WHERE pro_id='.$_GET['pro_id']);
 
-	// 	if ( $getProduto[0]!="SUCESSO" && $getProduto[1]!=1 ) {
-	// 		fgb_erro( 'Produto não encontrada', 'Não encontramos a produto com id: '.$_GET['pro_id'], 'formproduto.php', 'NOTFOUND' );
- //            exit;
-	// 	}
+		// var_dump($retorno);
 
-	// 	$_produto=$getProduto[2][0];
+		$_produto = $retorno->objeto[0];
 
-	// }
+	}
 ?>
 
 <form id="form_produto" class="needs-validation" novalidate>
@@ -43,13 +40,13 @@ error_reporting(0); //não exibir erros!*
 						</li>
 
 						<?php if ( !is_null($_produto->pro_id) ): ?>
-							<li class="nav-item">
+							<!-- <li class="nav-item">
 								<a class="nav-link tab_imgproduto" href="#tab_imgproduto" role="tab" aria-controls="tab_imgproduto" aria-selected="false">Imagens da produto</a>
 							</li>
 
 							<li class="nav-item">
 								<a class="nav-link tab_regiao" href="#tab_regiao" role="tab" aria-controls="tab_regiao" aria-selected="false">Região de Entrega</a>
-							</li>
+							</li> -->
 						<?php endif ?>
 							
 						<!-- <li class="nav-item">
@@ -66,24 +63,42 @@ error_reporting(0); //não exibir erros!*
 				<div id="tab_dadosprincipais" class="tab-pane active" role="tabpanel">
 					<!-- CNPJ -->
 					<div class="row pl-3 pr-3 pt-0">
-					    <div class="col-md-6 mb-3">
-					        <label for="pro_cnpj" class="small text-dark">CNPJ <span id="pro_validacao" validacao=""></span></label>
+						<div class="col-12">
+					        <div class="col-md-12">
+					            </label><label for="btn_bem_pretendido" class="control-label"></label>
+					            <button id="btn_bem_pretendido" type="button" class="btn btn-block btn-info btn-sel-page">
+					                <span id="span_bem_pretendido"><b><i class="fas fa-car"></i> </b>Carro</span>
+					                <input id="bem_pretendido" name="bem_pretendido" type="checkbox" class="invisible">
+					            </button>
+					        </div>
+					        <HR />	
+						</div>
+						<div class="col-md-3 mb-3">
+					        <label for="pro_modelo" class="small text-dark">Modelo</label>
 					        <div class="input-group">
-					            <div class="input-group-prepend">
-					                <span class="input-group-text">
-					                	<i class="fas fa-store"></i>
-					                </span>
-					            </div>
-					            <input id="pro_cnpj" name="pro_cnpj" type="text" class="form-control cnpj" placeholder="CNPJ" required value="<?=$_produto->pro_cnpj?>">
-					            <div class="input-group-prepend">
-									<button id="btn_novaproduto" class="btn btn-success open_cnpj" type="button"><i class="fas fa-check"></i></button>
-									<a id="btn_editarproduto" class="btn btn-primary open_cnpj" type="button" href="#"><i class="fas fa-eye"></i></a>
-								</div>
+					            <input id="pro_modelo" name="pro_modelo" type="text" class="form-control" placeholder="Modelo" required minlength="4" maxlength="50" value="<?=$_produto->pro_modelo?>">
 					            <div class="invalid-feedback" style="width: 100%;">
-					                Informe o CNPJ da produto</span>
+					                Informe o nome da produto</span>
 					            </div>
 					        </div>
 					    </div>
+						<div class="col-md-3">
+						    <div class="form-group">
+							    <label for="pro_tipo" class="small text-dark">Marca</label>
+							    <select id="pro_tipo" class="form-control">
+							        <option>Chevrolet</option>
+							        <option>Fiat</option>
+							        <option>Ford</option>
+							        <option>Honda</option>
+							        <option>Hyundai</option>
+							        <option>Jeep</option>
+							        <option>Nissan</option>
+							        <option>Renault</option>
+							        <option>Toyota</option>
+							        <option>Volkswagen</option>
+							    </select>
+							</div>
+						</div>
 					    <div class="col-md-3 mb-3">
 					    	<label for="pro_status" class="small text-dark">Status</label>
 					        <div class="input-group">
@@ -100,7 +115,7 @@ error_reporting(0); //não exibir erros!*
 				    	<div class="col-md-3 mb-3">
 					    	<label for="pro_disponibilidade" class="small text-dark">Disponibilidade</label>
 					        <div class="input-group">
-					            <select id="pro_disponibilidade" name="pro_disponibilidade" class="custom-select d-block w-100 controle_cnpj" required>
+					            <select id="pro_disponibilidade" name="pro_disponibilidade" class="custom-select d-block w-100" required>
 					            	<option value <?=$_produto->pro_disponibilidade==-1?'selected':''?> hidden>- Selecione -</option>
 									<option value="1" <?=$_produto->pro_disponibilidade==1?'selected':''?> >Mostrar no site</option>
 									<option value="0" <?=$_produto->pro_disponibilidade==0?'selected':''?> >Ocultar do site</option>
@@ -113,71 +128,41 @@ error_reporting(0); //não exibir erros!*
 					</div>
 
 					<div class="row pl-3 pr-3 pt-0">
-					    <div class="col-md-6 mb-3">
-					        <label for="pro_razaosocial" class="small text-dark">Razão Social <span id="text_razaosocial" class="text-secondary"></span></label>
+						<div class="col-md-3 mb-3">
+					        <label for="pro_versao" class="small text-dark">Versão</label>
 					        <div class="input-group">
-					            <div class="input-group-prepend">
-					                <span class="input-group-text"><i class="far fa-user"></i></span>
-					            </div>
-					            <input id="pro_razaosocial" name="pro_razaosocial" type="text" class="form-control controle_cnpj" placeholder="Razão Social" required pattern="[\wà-úÀ-Ú ]+[\s]{1,}/?[\wà-úÀ-Ú ]*" maxlength="50" value="<?=$_produto->pro_razaosocial?>">
+					            <input id="pro_versao" name="pro_versao" type="text" class="form-control" placeholder="Versão" value="<?=$_produto->pro_versao?>" required>
 					            <div class="invalid-feedback" style="width: 100%;">
-					                Informe a Razão Social da produto</span>
+					                Informe a versão da produto
 					            </div>
 					        </div>
 					    </div>
-					    <div class="col-md-6 mb-3">
-					        <label for="pro_nomefantasia" class="small text-dark">Nome Fantasia</label>
-					        <div class="input-group">
-					            <input id="pro_nomefantasia" name="pro_nomefantasia" type="text" class="form-control controle_cnpj" placeholder="Nome Fantasia" required minlength="4" maxlength="50" value="<?=$_produto->pro_nomefantasia?>">
-					            <div class="invalid-feedback" style="width: 100%;">
-					                Informe o nome da produto</span>
-					            </div>
-					        </div>
-					    </div>
-					</div>
-
-					<div class="row pl-3 pr-3 pt-0">
-						<div class="col-md-6 mb-3">
-					        <label for="pro_im" class="small text-dark">Inscrição Municipal</label>
-					        <div class="input-group">
-					            <input id="pro_im" name="pro_im" type="text" class="form-control controle_cnpj" placeholder="Inscrição Municipal" value="<?=$_produto->pro_im?>">
-					        </div>
-					    </div>
-					    <div class="col-md-6 mb-3">
-					        <label for="pro_ie" class="small text-dark">Inscrição Estadual</label>
-					        <div class="input-group">
-					            <input id="pro_ie" name="pro_ie" type="text" class="form-control controle_cnpj" placeholder="Inscrição Estadual" value="<?=$_produto->pro_ie?>">
-					        </div>
-					    </div>
-					</div>
-
-					<div class="row pl-3 pr-3 pt-0">
-					    <div class="col-md-4 mb-3">
-					        <label for="pro_email" class="small text-dark">Email</label>
-					        <div class="input-group">
-					            <input id="pro_email" name="pro_email" type="email" class="form-control controle_cnpj" placeholder="Email" value="<?=$_produto->pro_email?>" required>
-					            <div class="invalid-feedback" style="width: 100%;">
-					                Informe o Email da produto
-					            </div>
-					        </div>
-					    </div>
-						<div class="col-md-4 mb-3">
-							<label for="pro_telefone" class="small text-dark">Telefone</label>
+						<div class="col-md-3 mb-3">
+							<label for="pro_cor" class="small text-dark">Cor</label>
 							<div class="input-group">
-								<input id="pro_telefone" name="pro_telefone" type="text" placeholder="Telefone" class="form-control controle_cnpj telefone" minlength="8" required value="<?=$_produto->pro_telefone?>">
+								<input id="pro_cor" name="pro_cor" type="text" placeholder="Cor" class="form-control" minlength="2" required value="<?=$_produto->pro_cor?>">
+								<div class="invalid-feedback" style="width: 100%;">
+									Informe a cor da produto
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 mb-3">
+							<label for="pro_km" class="small text-dark">KM</label>
+							<div class="input-group">
+								<input id="pro_km" name="pro_km" type="text" placeholder="KM" class="form-control numeros" minlength="2" required value="<?=$_produto->pro_km?>">
 								<div class="invalid-feedback" style="width: 100%;">
 									Informe o telefone da produto
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4 mb-3">
+						<div class="col-md-3 mb-3">
 							<label for="pro_celular" class="small text-dark">Celular</label>
 							<div class="input-group">
-								<input id="pro_celular" name="pro_celular" type="text" class="form-control celular controle_cnpj" placeholder="Só números"  value="<?=$_produto->pro_celular?>" minlength="8" required>
+								<input id="pro_celular" name="pro_celular" type="text" class="form-control celular" placeholder="Só números"  value="<?=$_produto->pro_celular?>" minlength="8" required>
 								<div class="input-group-prepend">
 									<div class="input-group-text">
 										<div class="custom-control custom-checkbox">
-											<input id="pro_whatsapp" name="pro_whatsapp" type="checkbox" class="custom-control-input controle_cnpj">
+											<input id="pro_whatsapp" name="pro_whatsapp" type="checkbox" class="custom-control-input">
 											<label for="pro_whatsapp" class="custom-control-label"><i class="fab fa-whatsapp"></i></label>
 										</div>
 									</div>
@@ -187,118 +172,75 @@ error_reporting(0); //não exibir erros!*
 								</div>
 							</div>
 						</div>
+					</div>
+
+					<div class="row pl-3 pr-3 pt-0">
+					    <div class="col-md-4 mb-3">
+					        <label for="pro_placa" class="small text-dark">Placa</label>
+					        <div class="input-group">
+					            <input id="pro_placa" name="pro_placa" type="text" class="form-control" placeholder="Placa" value="<?=$_produto->pro_placa?>" required>
+					            <div class="invalid-feedback" style="width: 100%;">
+					                Informe a Placa da produto
+					            </div>
+					        </div>
+					    </div>
+						<div class="col-md-4 mb-3">
+							<label for="pro_ano" class="small text-dark">Ano/Modelo</label>
+							<div class="input-group">
+								<input id="pro_ano" name="pro_ano" type="text" placeholder="Ano/Modelo" class="form-control" minlength="2" required value="<?=$_produto->pro_ano?>">
+								<div class="invalid-feedback" style="width: 100%;">
+									Informe o telefone da produto
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 mb-3">
+							<label for="pro_acessorios" class="small text-dark">Acessórios</label>
+							<div class="input-group">
+								<input id="pro_acessorios" name="pro_acessorios" type="text" placeholder="Ano/Modelo" class="form-control" minlength="2" required value="<?=$_produto->pro_acessorios?>">
+								<div class="invalid-feedback" style="width: 100%;">
+									Informe o telefone da produto
+								</div>
+							</div>
+						</div>
 		            </div>
 
 				    <div class="row pl-3 pr-3 pt-0">
-				    	<div class="col-md-3 mb-3">
-				            <label class="small" for="end_cep">CEP *</label>
-				            <div class="input-group">
-				              <div class="input-group-prepend">
-				                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
-				              </div>
-				              <input id="end_cep" name="end_cep" type="text" class="form-control end_cep controle_cnpj" placeholder="CEP" required  value="<?=$_produto->end_cep?>">
-				              <div class="invalid-feedback" style="width: 100%;">
-				                Campo obrigatório
-				              </div>
-				            </div>
-				            <span class="text-muted small">
-				              Digite somente os números e aguarde
-				            </span>
-				         </div>
-				        <div class="col-sm-8 col-md-7 mb-3">
-				          <label for="end_logradouro">Logradouro</label>
-				          <div class="input-group">
-				            <input id="end_logradouro" name="end_logradouro" type="text" class="form-control input_end" placeholder="Logradouro" readonly  value="<?=$_produto->end_logradouro?>">
-				            <div class="input-group-append">
-				              <button id="desbloquear_end" type="button" class="btn btn-outline-dark btn-block">
-				                  <i class="fas fa-lock"></i>
-				              </button>
-				              <div class="clearfix"></div>
-				              <button id="bloquear_end" type="button" class="btn btn-outline-dark btn-block">
-				                  <i class="fas fa-lock-open"></i>
-				              </button>
-				            </div>
-				            <div class="invalid-feedback" style="width: 100%;">
-				              Campo obrigatório
-				            </div>
-				          </div>
-				          <span class="text-muted small">
-				            Clique no botão <i id="text_block_icon" class="fas fa-lock"></i> para <span id="text_block">desbloquear</span> os campos
-				          </span>
-				        </div>
-				        <div class="col-sm-2 col-md-2 mb-3">
-				          <label for="end_numero">Nº</label>
-				          <div class="input-group">
-				            <input id="end_numero" name="end_numero" type="text" class="form-control input_end" placeholder="Nº" readonly  value="<?=$_produto->end_numero?>">
-				            <div class="invalid-feedback" style="width: 100%;">
-				              Campo obrigatório
-				            </div>
-				          </div>
-				        </div>
-				    </div>
-
-				    <div class="row pl-3 pr-3 pt-0">
-				        <div class="col-md-4 mb-3">
-				          <label for="end_complemento">Complemento</label>
-				          <div class="input-group">
-				            <input id="end_complemento" name="end_complemento" type="text" class="form-control input_end input_end" placeholder="Complemento" readonly  value="<?=$_produto->end_complemento?>">
-				            <div class="invalid-feedback" style="width: 100%;">
-				              Campo obrigatório
-				            </div>
-				          </div>
-				        </div>
-				        <div class="col-md-4 mb-3">
-				          <label for="end_bairro">Bairro</label>
-				          <div class="input-group">
-				            <input id="end_bairro" name="end_bairro" type="text" class="form-control input_end input_end" placeholder="Bairro" readonly  value="<?=$_produto->end_bairro?>">
-				            <div class="invalid-feedback" style="width: 100%;">
-				              Campo obrigatório
-				            </div>
-				          </div>
-				        </div>
-				        <div class="col-md-4 mb-3">
-				          <label for="end_cidade">Cidade</label>
-				          <div class="input-group">
-				            <input id="end_cidade" name="end_cidade" type="text" class="form-control input_end" placeholder="Cidade" readonly  value="<?=$_produto->end_cidade?>">
-				            <div class="invalid-feedback" style="width: 100%;">
-				              Campo obrigatório
-				            </div>
-				          </div>
-				        </div>
-				    </div>
-
-				    <div class="row pl-3 pr-3 pt-0">
-				        <div class="col-md-4 mb-3">
-				          <label for="end_estado">Estado</label>
-				          <div class="input-group">
-				            <input id="end_estado" name="end_estado" type="text" class="form-control input_end" placeholder="Estado" readonly  value="<?=$_produto->end_estado?>">
-				            <div class="invalid-feedback" style="width: 100%;">
-				              Campo obrigatório
-				            </div>
-				          </div>
-				        </div>
-				        <div class="col-md-4 mb-3">
-				          <label for="end_pais">País</label>
-				          <div class="input-group">
-				            <input id="end_pais" name="end_pais" type="text" class="form-control input_end" placeholder="Brasil" readonly  value="<?=$_produto->end_pais==""?'Brasil':$_produto->end_pais?>">
-				            <div class="invalid-feedback" style="width: 100%;">
-				              Campo obrigatório
-				            </div>
-				          </div>
-				        </div>
-				        <div class="col-md-4 mb-3">
-				          <label for="end_googlemaps">Google Maps</label>
-				          <div class="input-group">
-				            <input id="end_googlemaps" name="end_googlemaps" type="link" class="form-control input_end input_end controle_cnpj" placeholder="Link"  value="<?=$_produto->end_googlemaps?>">
-				          </div>
-				        </div>
+				    	<div class="col-md-12 mb-3">
+					    	<div class="form-group">
+							    </label><label for="btn_troca" class="control-label"></label>
+							    <button id="btn_troca" type="button" class="btn btn-block btn-danger">
+							        <b>Você aceita troca? </b><span id="span_troca">NÃO</span>
+							        <input id="troca" name="troca" type="checkbox" class="invisible">
+							    </button>
+							    </label><label for="btn_proprietario" class="control-label"></label>
+							    <button id="btn_proprietario" type="button" class="btn btn-block btn-danger">
+							        <b>Você é o primeiro proprietário? </b><span id="span_proprietario">NÃO</span>
+							        <input id="proprietario" name="proprietario" type="checkbox" class="invisible">
+							    </button>
+							    </label><label for="btn_mancha" class="control-label"></label>
+							    <button id="btn_mancha" type="button" class="btn btn-block btn-danger">
+							        <b>O estofamento possui mancha? </b><span id="span_mancha">NÃO</span>
+							        <input id="mancha" name="mancha" type="checkbox" class="invisible">
+							    </button>
+							    </label><label for="btn_seguro" class="control-label"></label>
+							    <button id="btn_seguro" type="button" class="btn btn-block btn-danger">
+							        <b>O seu veiculo possui seguro? </b><span id="span_seguro">NÃO</span>
+							        <input id="seguro" name="seguro" type="checkbox" class="invisible">
+							    </button>
+							    </label><label for="btn_recuperado" class="control-label"></label>
+							    <button id="btn_recuperado" type="button" class="btn btn-block btn-danger">
+							        <b>O veiculo já foi recuperado de roubo? </b><span id="span_recuperado">NÃO</span>
+							        <input id="recuperado" name="recuperado" type="checkbox" class="invisible">
+							    </button>
+							</div>
+						</div>
 				    </div>
 
 				    <div class="row pl-3 pr-3 pt-0">
 				        <div class="col-md-12 mb-3">
 				          <label for="pro_descricao">Descrição</label>
 				          <div class="input-group">
-				            <textarea id="pro_descricao" name="pro_descricao" minlength="20" maxlength="250" type="text" class="form-control controle_cnpj" placeholder="Descrição sobre a produto" rows="3" required><?=$_produto->pro_descricao?></textarea>
+				            <textarea id="pro_descricao" name="pro_descricao" minlength="20" maxlength="250" type="text" class="form-control" placeholder="Descrição sobre a produto" rows="3" required><?=$_produto->pro_descricao?></textarea>
 				            <div class="invalid-feedback" style="width: 100%;">
 				              Descreva a produto
 				            </div>
@@ -528,7 +470,81 @@ error_reporting(0); //não exibir erros!*
 </form>
 
 <script type="text/javascript">
-	$(document).ready(function(){ 
+	$(document).ready(function(){
+		$('.numeros').mask('####');
+
+		// BOTAO TROCA ENTRE CARRO E IMOVEL --------------------------------------------------------------------------------------------
+		// $('#btn_bem_pretendido').click(function(){
+  //           if(document.getElementById("bem_pretendido").checked == true){
+  //               document.getElementById("bem_pretendido").checked = false;
+  //               $('#btn_bem_pretendido').removeClass('btn-warning').addClass('btn-info');
+  //               $('#span_bem_pretendido').html('<b><i class="fas fa-car"></i> </b>Automovel');
+  //           }else{
+  //               document.getElementById("bem_pretendido").checked = true;
+  //               $('#btn_bem_pretendido').removeClass('btn-info').addClass('btn-warning');
+  //               $('#span_bem_pretendido').html('<b><i class="fas fa-home"></i> </b>Imovel');              
+  //           }
+  //       });
+
+        $('#btn_troca').click(function(){
+            if(document.getElementById("troca").checked == true){
+                document.getElementById("troca").checked = false;
+                $('#btn_troca').removeClass('btn-success').addClass('btn-danger');
+                $('#span_troca').html('NÃO');
+            }else{
+                document.getElementById("troca").checked = true;
+                $('#btn_troca').removeClass('btn-danger').addClass('btn-success');
+                $('#span_troca').html('SIM');              
+            }
+        });
+
+        $('#btn_proprietario').click(function(){
+            if(document.getElementById("proprietario").checked == true){
+                document.getElementById("proprietario").checked = false;
+                $('#btn_proprietario').removeClass('btn-success').addClass('btn-danger');
+                $('#span_proprietario').html('NÃO');
+            }else{
+                document.getElementById("proprietario").checked = true;
+                $('#btn_proprietario').removeClass('btn-danger').addClass('btn-success');
+                $('#span_proprietario').html('SIM');              
+            }
+        });
+
+        $('#btn_mancha').click(function(){
+            if(document.getElementById("mancha").checked == true){
+                document.getElementById("mancha").checked = false;
+                $('#btn_mancha').removeClass('btn-success').addClass('btn-danger');
+                $('#span_mancha').html('NÃO');
+            }else{
+                document.getElementById("mancha").checked = true;
+                $('#btn_mancha').removeClass('btn-danger').addClass('btn-success');
+                $('#span_mancha').html('SIM');              
+            }
+        });
+
+        $('#btn_seguro').click(function(){
+            if(document.getElementById("seguro").checked == true){
+                document.getElementById("seguro").checked = false;
+                $('#btn_seguro').removeClass('btn-success').addClass('btn-danger');
+                $('#span_seguro').html('NÃO');
+            }else{
+                document.getElementById("seguro").checked = true;
+                $('#btn_seguro').removeClass('btn-danger').addClass('btn-success');
+                $('#span_seguro').html('SIM');              
+            }
+        });
+
+        $('#btn_recuperado').click(function(){
+            if(document.getElementById("recuperado").checked == true){
+                document.getElementById("recuperado").checked = false;
+                $('#btn_recuperado').removeClass('btn-success').addClass('btn-danger');
+                $('#span_recuperado').html('NÃO');
+            }else{
+                document.getElementById("recuperado").checked = true;
+                $('#btn_recuperado').removeClass('btn-danger').addClass('btn-success');
+                $('#span_recuperado').html('SIM');              
+            }
+        });
 
 		<?php if ( !isset($_GET['pro_id']) && $_GET['pro_id']=="" ): ?>
 			// desativando os campos para formulário vazio
@@ -543,6 +559,31 @@ error_reporting(0); //não exibir erros!*
 			<?php if ( $_produto->pro_whatsapp==1 ): ?>
 				setTimeout(function(){
 		            $('#pro_whatsapp').click();
+		        }, 1000);
+			<?php endif ?>
+			<?php if ( $_produto->pro_troca==1 ): ?>
+				setTimeout(function(){
+		            $('#btn_troca').click();
+		        }, 1000);
+			<?php endif ?>
+			<?php if ( $_produto->pro_proprietario==1 ): ?>
+				setTimeout(function(){
+		            $('#btn_proprietario').click();
+		        }, 1000);
+			<?php endif ?>
+			<?php if ( $_produto->pro_mancha==1 ): ?>
+				setTimeout(function(){
+		            $('#btn_mancha').click();
+		        }, 1000);
+			<?php endif ?>
+			<?php if ( $_produto->pro_seguro==1 ): ?>
+				setTimeout(function(){
+		            $('#btn_seguro').click();
+		        }, 1000);
+			<?php endif ?>
+			<?php if ( $_produto->pro_recuperado==1 ): ?>
+				setTimeout(function(){
+		            $('#btn_recuperado').click();
 		        }, 1000);
 			<?php endif ?>
 
@@ -592,12 +633,6 @@ error_reporting(0); //não exibir erros!*
 	            $(".<?=$_GET['tab']?>").click();
 	        }, 1500);
 		<?php endif ?>
-
-		// Mask
-			$('#pro_cnpj').mask("99.999.999/9999-99");
-
-		// hides
-			$('.open_cnpj, .send_hide').hide();
 
 		// controle upload imagem
 			$(".file_ambiente").change(function(){
@@ -674,29 +709,6 @@ error_reporting(0); //não exibir erros!*
 			$('#btn_continuar').click(function(event) {
 				$("#form_novaproduto").submit();
 			});
-
-		setInterval(function(){ 
-			if ( $('#pro_cnpj').val().length>10 ) {
-				if ( validarCNPJ( $('#pro_cnpj').val() ) ) {
-					if ( $('#pro_validacao').attr('validacao')=="" ) {
-						$('#pro_validacao').html(' - <span class="text-success"> Válido! <span id="text_cnpj" class="text-secondary">Aguarde...</span></span>');
-						validarcampo('cnpj');
-					}
-				} else {
-					$('#pro_validacao').attr('validacao', '');
-					$('#pro_validacao').html(' - <span class="text-danger"> inválido!</span>');
-					$('.open_cnpj').hide();
-					$('.controle_cnpj').attr('disabled', true);
-				}
-			}else{
-				$('.open_cnpj').hide();
-				$('#pro_validacao').attr('validacao', '');
-				$('.controle_cnpj').attr('disabled', true);
-			}
-			if ( $('#pro_razaosocial').val().length>4 ) {
-				validarcampo('razaosocial');
-			}
-		}, 100);
 	}); // fim do ready
 
 	function upload_imagem(img_id) {
@@ -875,8 +887,8 @@ error_reporting(0); //não exibir erros!*
 			data:   'acao='+acao+'&pro_id='+$("#pro_id").val()+'&end_id='+$("#end_id").val()+'&'+form,
 			success: function(retorno){
 				var arrRetorno = retorno.split('||');
-				// console.log(retorno);
-				// return false;
+				console.log(retorno);
+				return false;
 				if (arrRetorno[0]=="SUCESSO") {
                     swal({
                       title: "SUCESSO",

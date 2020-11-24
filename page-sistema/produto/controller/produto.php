@@ -48,7 +48,7 @@ error_reporting(0); //não exibir erros!*
 				if ( $coluna==$_POST['campo'] && !is_null($info) ) {
 					if ( file_exists('../media/'.$info)) {
 						if ( unlink('../media/'.$info) ) {
-							$s_produto = "UPDATE `acb_produto` SET `".$_POST['campo']."`=NULL,  `pro_dtalter`=now(), `pro_usualter`=:usuario WHERE `pro_id`=:pro_id";
+							$s_produto = "UPDATE `rtv_produto` SET `".$_POST['campo']."`=NULL,  `pro_dtalter`=now(), `pro_usualter`=:usuario WHERE `pro_id`=:pro_id";
 							try {
 								$conexao->beginTransaction();
 								$r_produto = $conexao->prepare($s_produto);
@@ -79,99 +79,65 @@ error_reporting(0); //não exibir erros!*
 				exit;
 			}
 
-			if ( $_POST['pro_cnpj']=="" ) {
-				echo "ERROPOST||Erro nas informações enviadas, atualize e tente novamente!";
-				exit;
-			} else {
-				$getLoja = sc_getLoja( array('pro_cnpj' => $_POST['pro_cnpj'] ) );
-
-				if ( $getLoja[0]=="SUCESSO" && $getLoja[1]>0 ) {
-					echo "EMPRESAENCONTRADA||Já existe produto cadastrada com este CNPJ, Atualize e tente novamente!";
-					exit;
-				}
-			}
-
-			if ( $_POST['pro_razaosocial']=="" ) {
-				echo "ERROPOST||Erro nas informações enviadas, atualize e tente novamente!";
-				exit;
-			} else {
-				$getLoja = sc_getLoja( array('pro_razaosocial' => $_POST['pro_razaosocial'] ) );
-
-				if ( $getLoja[0]=="SUCESSO" && $getLoja[1]>0 ) {
-					echo "EMPRESAENCONTRADA||Já existe produto cadastrada com esta Razão Social, Atualize e tente novamente!";
-					exit;
-				}
-			}
-
 			$_POST['pro_whatsapp']=$_POST['pro_whatsapp']=="on"?1:0;
+			$_POST['proprietario']=$_POST['proprietario']=="on"?1:0;
+			$_POST['troca']=$_POST['troca']=="on"?1:0;
+			$_POST['mancha']=$_POST['mancha']=="on"?1:0;
+			$_POST['seguro']=$_POST['seguro']=="on"?1:0;
+			$_POST['recuperado']=$_POST['recuperado']=="on"?1:0;
 
 			if ( $_POST['pro_id']=="" ) {
-				$s_produto = "INSERT INTO `acb_produto`( `pro_status`, `pro_disponibilidade`, `pro_cnpj`, `pro_razaosocial`, `pro_nomefantasia`, `pro_im`, `pro_ie`, `pro_email`, `pro_telefone`, `pro_celular`, `pro_whatsapp`, `pro_idendereco`, `pro_descricao`, `pro_dtcad`, `pro_dtalter`, `pro_usualter` ) VALUES ( :pro_status, :pro_disponibilidade, :pro_cnpj, :pro_razaosocial, :pro_nomefantasia, :pro_im, :pro_ie, :pro_email, :pro_telefone, :pro_celular, :pro_whatsapp, :pro_idendereco, :pro_descricao, now(), now(), :usuario )";
-
-				$s_endereco = "INSERT INTO `acb_endereco`( `end_cep`, `end_logradouro`, `end_numero`, `end_complemento`, `end_bairro`, `end_cidade`, `end_estado`, `end_pais`, `end_googlemaps`, `end_dtcad`, `end_dtalter`, `end_usualter` ) VALUES ( :end_cep, :end_logradouro, :end_numero, :end_complemento, :end_bairro, :end_cidade, :end_estado, :end_pais, :end_googlemaps, now(), now(), :usuario )";
+				$s_produto = "INSERT INTO `rtv_produto`( `pro_status`, `pro_disponibilidade`, `pro_modelo`, `pro_marca`, `pro_versao`, `pro_cor`, `pro_km`, `pro_celular`, `pro_whatsapp`, `pro_placa`, `pro_ano`, `pro_acessorios`, `pro_troca`, `pro_proprietario`, `pro_mancha`, `pro_seguro`, `pro_recuperado`, `pro_descricao`, `pro_dtcad`, `pro_dtalter`, `pro_usualter` ) VALUES ( :pro_status, :pro_disponibilidade, :pro_modelo, :pro_marca, :pro_versao, :pro_cor, :pro_km, :pro_celular, :pro_whatsapp, :pro_placa, :pro_ano, :pro_acessorios, :pro_troca, :pro_proprietario, :pro_mancha, :pro_seguro, :pro_recuperado, :pro_descricao, now(), now(), :usuario )";
 
 			}else{
-				$s_produto = "UPDATE `acb_produto` SET `pro_status`=:pro_status, `pro_disponibilidade`=:pro_disponibilidade, `pro_cnpj`=:pro_cnpj, `pro_razaosocial`=:pro_razaosocial, `pro_nomefantasia`=:pro_nomefantasia, `pro_im`=:pro_im, `pro_ie`=:pro_ie, `pro_telefone`=:pro_telefone, `pro_celular`=:pro_celular, `pro_whatsapp`=:pro_whatsapp, `pro_descricao`=:pro_descricao, `pro_email`=:pro_email, `pro_dtalter`=now(), `pro_usualter`=:usuario WHERE `pro_id`=:pro_id";
-
-				$s_endereco = "UPDATE `acb_endereco` SET `end_cep`=:end_cep, `end_logradouro`=:end_logradouro, `end_numero`=:end_numero, `end_complemento`=:end_complemento, `end_bairro`=:end_bairro, `end_cidade`=:end_cidade, `end_estado`=:end_estado, `end_pais`=:end_pais, `end_googlemaps`=:end_googlemaps, `end_dtalter`=now() WHERE `end_id`=:end_id";
+				$s_produto = "UPDATE `rtv_produto` SET `pro_status`=:pro_status, `pro_disponibilidade`=:pro_disponibilidade, `pro_modelo`=:pro_modelo, `pro_marca`=:pro_marca, `pro_versao`=:pro_versao, `pro_cor`=:pro_cor, `pro_km`=:pro_km, `pro_whatsapp`=:pro_whatsapp, `pro_celular`=:pro_celular, `pro_ano`=:pro_ano, `pro_descricao`=:pro_descricao, `pro_placa`=:pro_placa, `pro_acessorios`=:pro_acessorios, `pro_troca`=:pro_troca, `pro_proprietario`=:pro_proprietario, `pro_mancha`=:pro_mancha, `pro_seguro`=:pro_seguro, `pro_recuperado`=:pro_recuperado, `pro_dtalter`=now(), `pro_usualter`=:usuario WHERE `pro_id`=:pro_id";
 			}
 
-			try {
+
+
+			try {					
 				$conexao->beginTransaction();
 
-				$r_endereco = $conexao->prepare($s_endereco);
-				if ( $_POST['pro_id']!="" ) {
-					$r_endereco->bindParam(':end_id', 			$_POST['end_id'] );
+				$r_produto = $conexao->prepare($s_produto);
+
+				if ( $_POST['pro_id']=="" ) {
+				}else{
+					$r_produto->bindParam(':pro_id', 			$_POST['pro_id'] );
 				}
-				$r_endereco->bindParam(':end_cep', 				$_POST['end_cep'] );
-				$r_endereco->bindParam(':end_logradouro', 		$_POST['end_logradouro'] );
-				$r_endereco->bindParam(':end_numero', 			$_POST['end_numero'] );
-				$r_endereco->bindParam(':end_complemento', 		$_POST['end_complemento'] );
-				$r_endereco->bindParam(':end_bairro', 			$_POST['end_bairro'] );
-				$r_endereco->bindParam(':end_cidade', 			$_POST['end_cidade'] );
-				$r_endereco->bindParam(':end_estado', 			$_POST['end_estado'] );
-				$r_endereco->bindParam(':end_pais', 			$_POST['end_pais'] );
-				$r_endereco->bindParam(':end_googlemaps', 		$_POST['end_googlemaps'] );
-				$r_endereco->bindParam(':usuario', 				$usu_id );
+				
+				$r_produto->bindParam(':pro_status', 			$_POST['pro_status'] );
+				$r_produto->bindParam(':pro_disponibilidade',	$_POST['pro_disponibilidade'] );
+				$r_produto->bindParam(':pro_modelo', 			$_POST['pro_modelo'] );
+				$r_produto->bindParam(':pro_marca', 		$_POST['pro_marca'] );
+				$r_produto->bindParam(':pro_versao', 	$_POST['pro_versao'] );
+				$r_produto->bindParam(':pro_cor', 				$_POST['pro_cor'] );
+				$r_produto->bindParam(':pro_km', 				$_POST['pro_km'] );
+				$r_produto->bindParam(':pro_celular', 			$_POST['pro_celular'] );
+				$r_produto->bindParam(':pro_whatsapp', 		$_POST['pro_whatsapp'] );
+				$r_produto->bindParam(':pro_placa', 			$_POST['pro_placa'] );
+				$r_produto->bindParam(':pro_ano', 		$_POST['pro_ano'] );
+				$r_produto->bindParam(':pro_acessorios', 		$_POST['pro_acessorios'] );
+				$r_produto->bindParam(':pro_troca', 		$_POST['troca'] );
+				$r_produto->bindParam(':pro_proprietario', 		$_POST['proprietario'] );
+				$r_produto->bindParam(':pro_mancha', 		$_POST['mancha'] );
+				$r_produto->bindParam(':pro_seguro', 		$_POST['seguro'] );
+				$r_produto->bindParam(':pro_recuperado', 		$_POST['recuperado'] );
+				$r_produto->bindParam(':pro_descricao', 		$_POST['pro_descricao'] );
+				$r_produto->bindParam(':usuario', 				$usu_id );
 
-				if ( $r_endereco->execute() ) {
-					
-					$r_produto = $conexao->prepare($s_produto);
-
+				if ($r_produto->execute()) {
 					if ( $_POST['pro_id']=="" ) {
-						$_idendereco = $conexao->lastInsertId();
-						$r_produto->bindParam(':pro_idendereco',	$_idendereco );
+						$_idLoja = $conexao->lastInsertId();
+						echo "SUCESSO||Loja cadastrada!||".$_idLoja;
 					}else{
-						$r_produto->bindParam(':pro_id', 			$_POST['pro_id'] );
+						echo "SUCESSO||Loja atualizada!||".$_POST['pro_id'];
 					}
-					
-					$r_produto->bindParam(':pro_status', 			$_POST['pro_status'] );
-					$r_produto->bindParam(':pro_disponibilidade',	$_POST['pro_disponibilidade'] );
-					$r_produto->bindParam(':pro_cnpj', 			$_POST['pro_cnpj'] );
-					$r_produto->bindParam(':pro_razaosocial', 		$_POST['pro_razaosocial'] );
-					$r_produto->bindParam(':pro_nomefantasia', 	$_POST['pro_nomefantasia'] );
-					$r_produto->bindParam(':pro_im', 				$_POST['pro_im'] );
-					$r_produto->bindParam(':pro_ie', 				$_POST['pro_ie'] );
-					$r_produto->bindParam(':pro_email', 			$_POST['pro_email'] );
-					$r_produto->bindParam(':pro_telefone', 		$_POST['pro_telefone'] );
-					$r_produto->bindParam(':pro_celular', 			$_POST['pro_celular'] );
-					$r_produto->bindParam(':pro_whatsapp', 		$_POST['pro_whatsapp'] );
-					$r_produto->bindParam(':pro_descricao', 		$_POST['pro_descricao'] );
-					$r_produto->bindParam(':usuario', 				$usu_id );
-
-					if ( $r_produto->execute() ) {
-						if ( $_POST['pro_id']=="" ) {
-							$_idLoja = $conexao->lastInsertId();
-							echo "SUCESSO||Loja cadastrada!||".$_idLoja;
-						}else{
-							echo "SUCESSO||Loja atualizada!||".$_POST['pro_id'];
-						}
-					}
+				}else{
 				}
 
 				$conexao->commit();
 
-			} catch (PDOException $e) {
+			}catch (PDOException $e) {
 				$conexao->rollBack();
 				echo "ERROGRAVE||".$e;
 				exit;
@@ -182,7 +148,7 @@ error_reporting(0); //não exibir erros!*
 			// buscar produtoS
 			$contexto = '%'.$_POST['pro_pesquisar'].'%';
 
-			$like = " L.`pro_id` LIKE '".$contexto."' OR  L.`pro_razaosocial` LIKE '".$contexto."' OR  L.`pro_nomefantasia` LIKE '".$contexto."' OR L.`pro_cnpj` LIKE '".$contexto."'";
+			$like = " L.`pro_id` LIKE '".$contexto."' OR  L.`pro_marca` LIKE '".$contexto."' OR  L.`pro_versao` LIKE '".$contexto."' OR L.`pro_modelo` LIKE '".$contexto."'";
 
 			$getLoja = sc_getLoja( '' , 'WHERE '.$like.'  GROUP BY L.`pro_id` ORDER BY L.`pro_dtalter` DESC LIMIT '.$_POST['pro_quantidade'] );
 
@@ -202,7 +168,7 @@ error_reporting(0); //não exibir erros!*
 								<div class='card mb-3'>
 									<div class='card-header'>
 										<i class=\"fas fa-circle text-".$text_status."\"></i>
-										<b class='text-uppercase'>".$produto->pro_razaosocial."</b>
+										<b class='text-uppercase'>".$produto->pro_marca."</b>
 										<a href='produto?view=formproduto&pro_id=".$produto->pro_id."' class='btn btn-primary btn-sm float-right' style='border-radius: 50px;'>
 											<i class='fas fa-user-edit'></i> 
 											<span class='d-none d-md-inline'>EDITAR</span>
@@ -211,10 +177,10 @@ error_reporting(0); //não exibir erros!*
 									<div class='card-body'>
 										<div class='row text-secondary'>
 											<div class='col-4'>
-												<b>CNPJ:</b> ".$produto->pro_cnpj."
+												<b>CNPJ:</b> ".$produto->pro_modelo."
 											</div>
 											<div class='col-4'>
-												<b>Razão Social:</b> ".$produto->pro_nomefantasia."
+												<b>Razão Social:</b> ".$produto->pro_versao."
 											</div>
 											<div class='col-4 text-right'>
 												".$pro_disponibilidade."
@@ -222,10 +188,10 @@ error_reporting(0); //não exibir erros!*
 										</div>
 										<div class='row text-secondary'>
 											<div class='col-4'>
-												<b>Email:</b> ".$produto->pro_email."
+												<b>Email:</b> ".$produto->pro_celular."
 											</div>
 											<div class='col-4'>
-												<b>Telefone:</b> ".$produto->pro_telefone."
+												<b>Telefone:</b> ".$produto->pro_whatsapp."
 											</div>
 											<div class='col-4 text-right'>
 												<b>Celular:</b> ".$produto->pro_celular."
